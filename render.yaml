@@ -1,0 +1,10 @@
+services:
+  - type: web
+    name: emotional-ticketing
+    env: docker
+    plan: free
+    buildCommand: ./mvnw package -DskipTests
+    startCommand: java -jar target/*.jar
+    envVars:
+      - key: SPRING_PROFILES_ACTIVE
+        value: production
