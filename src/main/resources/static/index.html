@@ -1,0 +1,732 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Emotional Ticketing System - Huston-Tillotson University</title>
+    <style>
+        :root {
+            --primary-color: #5c6bc0;
+            --primary-dark: #3f51b5;
+            --success-color: #4caf50;
+            --error-color: #f44336;
+            --warning-color: #ff9800;
+            --background-color: #f7f7f7;
+            --card-color: #fff;
+            --text-color: #333;
+            --text-secondary: #555;
+            --border-color: #ccc;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: var(--background-color);
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            color: var(--text-color);
+        }
+
+        header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 1rem;
+            text-align: center;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        nav {
+            display: flex;
+            justify-content: center;
+            background-color: var(--primary-dark);
+            padding: 0.5rem;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            margin: 0 0.5rem;
+            border-radius: 4px;
+            transition: background-color 0.3s;
+        }
+
+        nav a:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        nav a.active {
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+
+        main {
+            flex: 1;
+            padding: 2rem;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+        }
+
+        .container {
+            background-color: var(--card-color);
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 2rem;
+            width: 100%;
+            max-width: 600px;
+            box-sizing: border-box;
+        }
+
+        h1 {
+            text-align: center;
+            color: var(--primary-color);
+            margin-top: 0;
+        }
+
+        form {
+            margin-top: 1.5rem;
+        }
+
+        textarea, input[type="text"], input[type="password"], input[type="email"] {
+            width: 100%;
+            padding: 0.75rem;
+            margin-top: 0.5rem;
+            border-radius: 4px;
+            border: 1px solid var(--border-color);
+            font-size: 16px;
+            box-sizing: border-box;
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        label {
+            font-size: 16px;
+            margin-top: 1rem;
+            display: block;
+            color: var(--text-secondary);
+        }
+
+        .checkbox-container {
+            display: flex;
+            align-items: center;
+            margin-top: 1rem;
+        }
+
+        .checkbox-container input[type="checkbox"] {
+            margin-right: 0.5rem;
+        }
+
+        .rating-container {
+            display: flex;
+            margin-top: 0.5rem;
+        }
+
+        .rating-star {
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #ccc;
+            margin-right: 0.25rem;
+        }
+
+        .rating-star.active {
+            color: #ffc107;
+        }
+
+        button {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 4px;
+            font-size: 16px;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 1.5rem;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: var(--primary-dark);
+        }
+
+        .alert {
+            padding: 1rem;
+            border-radius: 4px;
+            margin-top: 1.5rem;
+            display: none;
+            text-align: center;
+        }
+
+        .success {
+            background-color: rgba(76, 175, 80, 0.1);
+            color: var(--success-color);
+            border: 1px solid var(--success-color);
+        }
+
+        .error {
+            background-color: rgba(244, 67, 54, 0.1);
+            color: var(--error-color);
+            border: 1px solid var(--error-color);
+        }
+
+        footer {
+            background-color: var(--primary-color);
+            color: white;
+            text-align: center;
+            padding: 1rem;
+            margin-top: 2rem;
+        }
+
+        .tab-container {
+            margin-bottom: 1rem;
+        }
+
+        .tab {
+            display: inline-block;
+            padding: 0.75rem 1.5rem;
+            background-color: #e0e0e0;
+            border-radius: 4px 4px 0 0;
+            cursor: pointer;
+            margin-right: 0.25rem;
+        }
+
+        .tab.active {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .login-container {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .login-container button {
+            margin-top: 1rem;
+        }
+
+        @media (max-width: 768px) {
+            main {
+                padding: 1rem;
+            }
+            
+            .container {
+                padding: 1rem;
+            }
+            
+            nav {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            nav a {
+                margin: 0.25rem 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Huston-Tillotson University</h1>
+        <p>Emotional Support Ticketing System</p>
+    </header>
+    
+    <nav>
+        <a href="#" class="active" data-tab="ticket">Submit Ticket</a>
+        <a href="#" data-tab="feedback">Provide Feedback</a>
+        <a href="#" data-tab="login">Login/Register</a>
+    </nav>
+    
+    <main>
+        <div class="container">
+            
+            <div id="ticket-tab" class="tab-content active">
+                <h1>Submit Support Request</h1>
+                <form id="ticketForm">
+                    <textarea id="ticketContent" placeholder="What's on your mind? Feel free to share your thoughts or concerns here..."></textarea>
+                    
+                    <div class="checkbox-container">
+                        <input type="checkbox" id="anonymous" checked>
+                        <label for="anonymous">Submit anonymously</label>
+                    </div>
+                    
+                    <button type="submit">Submit Request</button>
+                </form>
+                <div class="alert success" id="ticketSuccess">Your request has been submitted successfully!</div>
+                <div class="alert error" id="ticketError">Error submitting request. Please try again.</div>
+            </div>
+            
+            
+            <div id="feedback-tab" class="tab-content">
+                <h1>Provide Feedback</h1>
+                <form id="feedbackForm">
+                    <textarea id="feedbackContent" placeholder="How was your experience with our emotional support services?"></textarea>
+                    
+                    <label>Rating</label>
+                    <div class="rating-container">
+                        <span class="rating-star" data-rating="1">★</span>
+                        <span class="rating-star" data-rating="2">★</span>
+                        <span class="rating-star" data-rating="3">★</span>
+                        <span class="rating-star" data-rating="4">★</span>
+                        <span class="rating-star" data-rating="5">★</span>
+                    </div>
+                    <input type="hidden" id="ratingValue" value="0">
+                    
+                    <div class="checkbox-container">
+                        <input type="checkbox" id="feedbackAnonymous" checked>
+                        <label for="feedbackAnonymous">Submit anonymously</label>
+                    </div>
+                    
+                    <button type="submit">Submit Feedback</button>
+                </form>
+                <div class="alert success" id="feedbackSuccess">Your feedback has been submitted successfully!</div>
+                <div class="alert error" id="feedbackError">Error submitting feedback. Please try again.</div>
+            </div>
+            
+            
+            <div id="login-tab" class="tab-content">
+                <div class="tab-container">
+                    <div class="tab active" data-login-tab="login">Login</div>
+                    <div class="tab" data-login-tab="register">Register</div>
+                </div>
+                
+                
+                <div id="login-form" class="login-container active">
+                    <h1>Login</h1>
+                    <form id="loginForm">
+                        <label for="loginUsername">Username</label>
+                        <input type="text" id="loginUsername" required>
+                        
+                        <label for="loginPassword">Password</label>
+                        <input type="password" id="loginPassword" required>
+                        
+                        <button type="submit">Login</button>
+                    </form>
+                    <div class="alert success" id="loginSuccess">Logged in successfully!</div>
+                    <div class="alert error" id="loginError">Invalid credentials. Please try again.</div>
+                </div>
+                
+                
+                <div id="register-form" class="login-container" style="display:none;">
+                    <h1>Register</h1>
+                    <form id="registerForm">
+                        <label for="registerUsername">Username</label>
+                        <input type="text" id="registerUsername" required>
+                        
+                        <label for="registerEmail">Email</label>
+                        <input type="email" id="registerEmail" required>
+                        
+                        <label for="registerPassword">Password</label>
+                        <input type="password" id="registerPassword" required>
+                        
+                        <button type="submit">Register</button>
+                    </form>
+                    <div class="alert success" id="registerSuccess">Registered successfully! You can now login.</div>
+                    <div class="alert error" id="registerError">Error registering. Please try again.</div>
+                </div>
+            </div>
+        </div>
+    </main>
+    
+    <footer>
+        <p>&copy; 2025 Huston-Tillotson University - Emotional Support Ticketing System</p>
+    </footer>
+
+    <script>
+        
+        document.querySelectorAll('nav a').forEach(tab => {
+            tab.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                document.querySelectorAll('.tab-content').forEach(content => {
+                    content.classList.remove('active');
+                });
+                
+                document.querySelectorAll('nav a').forEach(t => {
+                    t.classList.remove('active');
+                });
+                
+                const tabId = this.getAttribute('data-tab');
+                document.getElementById(`${tabId}-tab`).classList.add('active');
+                this.classList.add('active');
+            });
+        });
+        
+        document.querySelectorAll('[data-login-tab]').forEach(tab => {
+            tab.addEventListener('click', function() {
+                document.querySelectorAll('[data-login-tab]').forEach(t => {
+                    t.classList.remove('active');
+                });
+                
+                this.classList.add('active');
+                
+                const tabId = this.getAttribute('data-login-tab');
+                if (tabId === 'login') {
+                    document.getElementById('login-form').style.display = 'block';
+                    document.getElementById('register-form').style.display = 'none';
+                } else {
+                    document.getElementById('login-form').style.display = 'none';
+                    document.getElementById('register-form').style.display = 'block';
+                }
+            });
+        });
+        
+        document.querySelectorAll('.rating-star').forEach(star => {
+            star.addEventListener('click', function() {
+                const rating = parseInt(this.getAttribute('data-rating'));
+                document.getElementById('ratingValue').value = rating;
+                
+                document.querySelectorAll('.rating-star').forEach(s => {
+                    s.classList.remove('active');
+                });
+                
+                document.querySelectorAll('.rating-star').forEach(s => {
+                    if (parseInt(s.getAttribute('data-rating')) <= rating) {
+                        s.classList.add('active');
+                    }
+                });
+            });
+        });
+        
+        document.getElementById('ticketForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    const content = document.getElementById('ticketContent').value;
+    const anonymous = document.getElementById('anonymous').checked;
+    
+    // Basic validation
+    if (!content || content.trim() === '') {
+        document.getElementById('ticketError').textContent = 'Please enter your thoughts or concerns.';
+        document.getElementById('ticketError').style.display = 'block';
+        setTimeout(() => {
+            document.getElementById('ticketError').style.display = 'none';
+        }, 4000);
+        return;
+    }
+    
+    const userId = sessionStorage.getItem('userId');
+    
+    const data = {
+        content: content,
+        anonymous: anonymous,
+        userId: anonymous ? null : userId
+    };
+    
+    // Show loading or disable button (optional)
+    const submitButton = this.querySelector('button[type="submit"]');
+    const originalButtonText = submitButton.textContent;
+    submitButton.disabled = true;
+    submitButton.textContent = 'Submitting...';
+    
+    fetch('/api/tickets/submit', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+    })
+    .then(response => {
+        // Parse the response even if it's an error
+        return response.text().then(text => {
+            try {
+                return { 
+                    ok: response.ok, 
+                    status: response.status, 
+                    data: JSON.parse(text) 
+                };
+            } catch (e) {
+                return { 
+                    ok: response.ok, 
+                    status: response.status, 
+                    data: text 
+                };
+            }
+        });
+    })
+    .then(result => {
+        // Reset button state
+        submitButton.disabled = false;
+        submitButton.textContent = originalButtonText;
+        
+        if (result.ok) {
+            // Success case
+            document.getElementById('ticketSuccess').style.display = 'block';
+            document.getElementById('ticketError').style.display = 'none';
+            document.getElementById('ticketForm').reset();
+            
+            setTimeout(() => {
+                document.getElementById('ticketSuccess').style.display = 'none';
+            }, 4000);
+        } else {
+            // Error case
+            let errorMessage = 'Error submitting request. Please try again.';
+            
+            // Try to extract error message from response
+            if (typeof result.data === 'object' && result.data.message) {
+                errorMessage = result.data.message;
+            } else if (typeof result.data === 'string' && result.data) {
+                errorMessage = result.data;
+            }
+            
+            document.getElementById('ticketError').textContent = errorMessage;
+            document.getElementById('ticketError').style.display = 'block';
+            document.getElementById('ticketSuccess').style.display = 'none';
+            
+            setTimeout(() => {
+                document.getElementById('ticketError').style.display = 'none';
+            }, 4000);
+        }
+    })
+    .catch(error => {
+        // Reset button state
+        submitButton.disabled = false;
+        submitButton.textContent = originalButtonText;
+        
+        // Network or other errors
+        console.error('Error:', error);
+        document.getElementById('ticketError').textContent = 'Network error. Please check your connection.';
+        document.getElementById('ticketError').style.display = 'block';
+        document.getElementById('ticketSuccess').style.display = 'none';
+        
+        setTimeout(() => {
+            document.getElementById('ticketError').style.display = 'none';
+        }, 4000);
+    });
+});
+        
+document.getElementById('feedbackForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    const content = document.getElementById('feedbackContent').value;
+    const rating = parseInt(document.getElementById('ratingValue').value);
+    const anonymous = document.getElementById('feedbackAnonymous').checked;
+    
+    // Validation
+    if (!content || content.trim() === '') {
+        document.getElementById('feedbackError').textContent = 'Please enter your feedback.';
+        document.getElementById('feedbackError').style.display = 'block';
+        setTimeout(() => {
+            document.getElementById('feedbackError').style.display = 'none';
+        }, 4000);
+        return;
+    }
+    
+    if (rating < 1 || rating > 5 || isNaN(rating)) {
+        document.getElementById('feedbackError').textContent = 'Please select a rating from 1 to 5.';
+        document.getElementById('feedbackError').style.display = 'block';
+        setTimeout(() => {
+            document.getElementById('feedbackError').style.display = 'none';
+        }, 4000);
+        return;
+    }
+    
+    const userId = sessionStorage.getItem('userId');
+    
+    const data = {
+        content: content,
+        rating: rating,
+        anonymous: anonymous,
+        userId: anonymous ? null : userId
+    };
+    
+    // Show loading or disable button
+    const submitButton = this.querySelector('button[type="submit"]');
+    const originalButtonText = submitButton.textContent;
+    submitButton.disabled = true;
+    submitButton.textContent = 'Submitting...';
+    
+    fetch('/api/feedback/submit', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+    })
+    .then(response => {
+        return response.text().then(text => {
+            try {
+                return { 
+                    ok: response.ok, 
+                    status: response.status, 
+                    data: JSON.parse(text) 
+                };
+            } catch (e) {
+                return { 
+                    ok: response.ok, 
+                    status: response.status, 
+                    data: text 
+                };
+            }
+        });
+    })
+    .then(result => {
+        // Reset button state
+        submitButton.disabled = false;
+        submitButton.textContent = originalButtonText;
+        
+        if (result.ok) {
+            // Success case
+            document.getElementById('feedbackSuccess').style.display = 'block';
+            document.getElementById('feedbackError').style.display = 'none';
+            document.getElementById('feedbackForm').reset();
+            
+            // Reset star rating
+            document.querySelectorAll('.rating-star').forEach(s => {
+                s.classList.remove('active');
+            });
+            document.getElementById('ratingValue').value = 0;
+            
+            setTimeout(() => {
+                document.getElementById('feedbackSuccess').style.display = 'none';
+            }, 4000);
+        } else {
+            // Error case
+            let errorMessage = 'Error submitting feedback. Please try again.';
+            
+            if (typeof result.data === 'object' && result.data.message) {
+                errorMessage = result.data.message;
+            } else if (typeof result.data === 'string' && result.data) {
+                errorMessage = result.data;
+            }
+            
+            document.getElementById('feedbackError').textContent = errorMessage;
+            document.getElementById('feedbackError').style.display = 'block';
+            document.getElementById('feedbackSuccess').style.display = 'none';
+            
+            setTimeout(() => {
+                document.getElementById('feedbackError').style.display = 'none';
+            }, 4000);
+        }
+    })
+    .catch(error => {
+        // Reset button state
+        submitButton.disabled = false;
+        submitButton.textContent = originalButtonText;
+        
+        console.error('Error:', error);
+        document.getElementById('feedbackError').textContent = 'Network error. Please check your connection.';
+        document.getElementById('feedbackError').style.display = 'block';
+        document.getElementById('feedbackSuccess').style.display = 'none';
+        
+        setTimeout(() => {
+            document.getElementById('feedbackError').style.display = 'none';
+        }, 4000);
+    });
+});
+        
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const username = document.getElementById('loginUsername').value;
+            const password = document.getElementById('loginPassword').value;
+            
+            const data = {
+                username: username,
+                password: password
+            };
+            
+            fetch('/api/users/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data),
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Invalid credentials');
+                }
+                return response.json();
+            })
+            .then(data => {
+                sessionStorage.setItem('userId', data.userId);
+                sessionStorage.setItem('username', data.username);
+                sessionStorage.setItem('role', data.role);
+                
+                document.getElementById('loginSuccess').style.display = 'block';
+                document.getElementById('loginError').style.display = 'none';
+                document.getElementById('loginForm').reset();
+                
+                setTimeout(() => {
+                    document.getElementById('loginSuccess').style.display = 'none';
+                    document.querySelector('nav a[data-tab="ticket"]').click();
+                }, 2000);
+            })
+            .catch(error => {
+                document.getElementById('loginError').style.display = 'block';
+                document.getElementById('loginSuccess').style.display = 'none';
+                console.error('Error:', error);
+                setTimeout(() => {
+                    document.getElementById('loginError').style.display = 'none';
+                }, 4000);
+            });
+        });
+        
+        document.getElementById('registerForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const username = document.getElementById('registerUsername').value;
+            const email = document.getElementById('registerEmail').value;
+            const password = document.getElementById('registerPassword').value;
+            
+            const data = {
+                username: username,
+                email: email,
+                password: password,
+                role: 'student' 
+            };
+            
+            fetch('/api/users/register', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data),
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Registration failed');
+                }
+                return response.json();
+            })
+            .then(data => {
+                document.getElementById('registerSuccess').style.display = 'block';
+                document.getElementById('registerError').style.display = 'none';
+                document.getElementById('registerForm').reset();
+                
+                setTimeout(() => {
+                    document.getElementById('registerSuccess').style.display = 'none';
+                    document.querySelector('[data-login-tab="login"]').click();
+                }, 2000);
+            })
+            .catch(error => {
+                document.getElementById('registerError').style.display = 'block';
+                document.getElementById('registerSuccess').style.display = 'none';
+                console.error('Error:', error);
+                setTimeout(() => {
+                    document.getElementById('registerError').style.display = 'none';
+                }, 4000);
+            });
+        });
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            const userId = sessionStorage.getItem('userId');
+            if (userId) {
+                console.log('User is logged in with ID:', userId);
+            }
+        });
+    </script>
+</body>
+</html>
